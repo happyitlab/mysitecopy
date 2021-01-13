@@ -1,11 +1,21 @@
 from django.shortcuts import render
-from .models import Post, Category
+from .models import Post, Category, SearchList
 from django.views.generic import ListView, DetailView
 from django.db.models import Q
 
 
 # Create your views here.
 # [CBV : Class Based View] --------------------------------
+class Search(ListView):
+    model = SearchList
+
+    def get_queryset(self):
+        lt = SearchList.objects.order_by('-data')
+        print('searchList >>', lt)
+
+        return lt
+
+
 class PostList(ListView):
     model = Post
 
@@ -27,23 +37,17 @@ class PostList(ListView):
 class PostSearch(PostList):
     def get_queryset(self):
         q = self.kwargs['question']
-        print('self.kwargs >>', self.kwargs)
-        print('self.kwargs[q] >>', self.kwargs['question'])
-        print('q >> ', q)
-
-        object_list = Post.objects.filter(Q(title__contains=q) | Q(content__contains=q))
-        return object_list
-
-        print('self.kwargs[question] >>', self.kwargs['question'])
-        print('q >>', q)
         object_list = Post.objects.filter(Q(title__contains=q) | Q(content__contains=q))
         return object_list
     
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(PostSearch, self).get_context_data()
         context['search_info'] = 'Search Result >> {}'.format(self.kwargs['question'])
-        return context
 
+        s = SearchList(searchword=self.kwargs['question'])
+        s.save()
+
+        return context
 
 
 class PostDetail(DetailView):

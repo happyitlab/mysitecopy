@@ -43,6 +43,9 @@ class SearchList(models.Model):
     searchword = models.CharField(max_length=100)
     data = models.DateTimeField(auto_now_add=True) #현재 시간으로 자동으로 설정
 
+    def __str__(self):
+        return self.searchword
+
 
 
 

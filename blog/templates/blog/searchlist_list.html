@@ -1,0 +1,36 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+    <h1>Good day!!!!</h1>
+
+    object_list : {{ object_list }} <br>
+    searchlist_list : {{ searchlist_list }} <br>
+    searchlist_list.0 : {{ searchlist_list.0 }} <br>
+
+    <ul>
+        {% for search in searchlist_list %}
+            <li> {{ search.searchword }} - {{ search.data }} </li>
+        {% endfor %}
+    </ul>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">순번</th>
+            <th scope="col">검색어</th>
+            <th scope="col">조회날짜</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for search in searchlist_list %}
+        <tr>
+            <th scope="row">{{ forloop.counter }}</th>
+            <td>{{ search.searchword }}</td>
+            <td>{{ search.data }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+{% endblock %}
