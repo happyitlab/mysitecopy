@@ -1,0 +1,42 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+
+    <h1 class="my-4">
+        Blog
+        {% if search_info %} <small class="text-muted"> : {{ search_info }}({{ object_list.count }})</small> {% endif %}
+    </h1>
+        {% if search_info %} <small class="text-muted"> {{ search_info }}({{ object_list.count }}) </small>  {% endif %}
+    </h1>
+    <!-- Blog Post -->
+    {% if object_list.exists %}
+        {% for p in object_list %}
+            <div class="card mb-4">
+                {% if p.head_image %}
+                    <img class="card-img-top" src="{{ p.head_image.url }}" alt="Card image cap">
+                {% else %}
+                    <img class="card-img-top" src="https://picsum.photos/id/237/750/300" alt="Card image cap">
+                {% endif %}
+
+                <div class="card-body">
+                    {% if p.category %}
+                        <span class="badge bg-success float-right">{{ p.category }}</span>
+                    {% else %}
+                        <span class="badge bg-success float-right">미분류</span>
+                    {% endif %}
+                    <h2 class="card-title"> {{ p.title }}</h2>
+                    <p class="card-text"> {{ p.content | truncatewords:50 }}</p>
+                    <a href="{{ p.get_absolute_url }}" class="btn btn-primary">Read More &rarr;</a>
+                </div>
+
+                <div class="card-footer text-muted">
+                    Posted on {{ p.created }} by
+                    <a href="#"> {{ p.author }} </a>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <h2>아직 게시물이 없습니다.</h2>
+    {% endif %}
+
+{% endblock %}
